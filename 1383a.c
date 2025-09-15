@@ -1,70 +1,103 @@
 #include <stdio.h>
+#include <stdbool.h>
 
-/*int jogo[9][9];
+#define TAMANHO 9
 
-int verificaLinha(int);
-int verificaColuna(int);
-int verificaQuadrado(int);
-void imprime();
-void preenche();
-
-int main(){
-    int linha, coluna, i, j, instancias, cont=0;
-    char resposta;
-
-    scanf("%d", &instancias);
-
-    do{
-        printf("Instancia %d\n", cont+1);
-    if(verificaLinha && verificaColuna && verificaQuadrado == 1)
-        printf("SIM\n");
-    else
-    printf("NAO\n");
-    cont++;
-    }while(cont < instancias);
-}
-int verificaLinha(jogo){
-    int ver1=ver2=ver3=ver4=ver5=ver6=ver7=ver8=ver9=0;
-    for(int i=0;i<9;i++){
-        if(jogo[i] == 1)ver1++;
-        if(jogo[i]== 2)ver2++;
-        if(jogo[i]==3)ver3++;
-        if(jogo[i]==4)ver4++;
-        if(jogo[i]==5)ver5++;
-        if(jogo[i]==6)ver6++;
-        if(jogo[i]==7)ver7++;
-        if(jogo[i]==8)ver8++;
-        if(jogo[i]==9)ver9++;
+// Função para verificar se os números de 1 a 9 estão presentes em um conjunto de 9 elementos.
+// Usa um array booleano para rastrear a presença de cada número.
+bool verifica_conjunto(int *conjunto) {
+    bool visto[TAMANHO + 1] = {false};
+    for (int i = 0; i < TAMANHO; i++) {
+        int num = conjunto[i];
+        if (num < 1 || num > 9 || visto[num]) {
+            return false;
+        }
+        visto[num] = true;
     }
-    if(ver1=ver2=ver3=ver4=ver5=ver6=ver7=ver8=ver9=1)return 1;
-    else return 0;
-}
-int verificaColuna(jogo){
-    int ver1=ver2=ver3=ver4=ver5=ver6=ver7=ver8=ver9=0;
-    for(int i=0;i<9;i++){
-        for(int j=0;j<9;j++){
-        if(jogo[i][j] == 1)ver1++;
-        if(jogo[i][j]== 2)ver2++;
-        if(jogo[i][j]==3)ver3++;
-        if(jogo[i][j]==4)ver4++;
-        if(jogo[i][j]==5)ver5++;
-        if(jogo[i][j]==6)ver6++;
-        if(jogo[i][j]==7)ver7++;
-        if(jogo[i][j]==8)ver8++;
-        if(jogo[i][j]==9)ver9++;
-    }
-}
-    if(ver1=ver2=ver3=ver4=ver5=ver6=ver7=ver8=ver9=1)return 1;
-    else return 0;
+    return true;
 }
 
-
-
-void preenche(){
-    int i, j;
-    for (i = 0; i < 9; i++) {
-        for(j = 0; j < 9; j++){
-            scanf("%d", &jogo[i][j]);
+// Verifica todas as linhas da matriz
+bool verifica_linhas(int sudoku[TAMANHO][TAMANHO]) {
+    for (int i = 0; i < TAMANHO; i++) {
+        int linha[TAMANHO];
+        for (int j = 0; j < TAMANHO; j++) {
+            linha[j] = sudoku[i][j];
+        }
+        if (!verifica_conjunto(linha)) {
+            return false;
         }
     }
-}*/
+    return true;
+}
+
+// Verifica todas as colunas da matriz
+bool verifica_colunas(int sudoku[TAMANHO][TAMANHO]) {
+    for (int j = 0; j < TAMANHO; j++) {
+        int coluna[TAMANHO];
+        for (int i = 0; i < TAMANHO; i++) {
+            coluna[i] = sudoku[i][j];
+        }
+        if (!verifica_conjunto(coluna)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+// Verifica todas as sub-regiões 3x3 da matriz
+bool verifica_subregioes(int sudoku[TAMANHO][TAMANHO]) {
+    for (int caixa_i = 0; caixa_i < TAMANHO; caixa_i += 3) {
+        for (int caixa_j = 0; caixa_j < TAMANHO; caixa_j += 3) {
+            int subregiao[TAMANHO];
+            int contador = 0;
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    subregiao[contador++] = sudoku[caixa_i + i][caixa_j + j];
+                }
+            }
+            if (!verifica_conjunto(subregiao)) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+// Função principal para verificar a matriz Sudoku completa
+bool eh_solucao_sudoku(int sudoku[TAMANHO][TAMANHO]) {
+    return verifica_linhas(sudoku) && verifica_colunas(sudoku) && verifica_subregioes(sudoku);
+}
+
+int main() {
+    int n, k;
+
+    // Leia o número de instâncias
+    scanf("%d", &n);
+
+    for (k = 1; k <= n; k++) {
+        int sudoku[TAMANHO][TAMANHO];
+
+        // Leia a matriz para a instância atual
+        for (int i = 0; i < TAMANHO; i++) {
+            for (int j = 0; j < TAMANHO; j++) {
+                scanf("%d", &sudoku[i][j]);
+            }
+        }
+
+        // Imprima o cabeçalho da instância
+        printf("Instancia %d\n", k);
+
+        // Verifique se a matriz é uma solução e imprima o resultado
+        if (eh_solucao_sudoku(sudoku)) {
+            printf("SIM\n");
+        } else {
+            printf("NAO\n");
+        }
+
+        // Imprima uma linha em branco após cada instância
+        printf("\n");
+    }
+
+    return 0;
+}
