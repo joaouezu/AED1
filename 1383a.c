@@ -1,103 +1,82 @@
 #include <stdio.h>
-#include <stdbool.h>
 
-#define TAMANHO 9
+// Tabuleiro como variável global
+int jogo[9][9];
 
-// Função para verificar se os números de 1 a 9 estão presentes em um conjunto de 9 elementos.
-bool verifica_conjunto(int *conjunto) {
-    bool visto[TAMANHO + 1] = {false};
-    for (int i = 0; i < TAMANHO; i++) {
-        int num = conjunto[i];
-        if (num < 1 || num > 9 || visto[num]) {
-            return false;
-        }
-        visto[num] = true;
-    }
-    return true;
-}
+int verificaLinha(int);
+int verificaColuna(int);
+int verificaQuadrado(int);
 
-// Verifica todas as linhas da matriz
-bool verifica_linhas(int sudoku[TAMANHO][TAMANHO]) {
-    for (int i = 0; i < TAMANHO; i++) {
-        int linha[TAMANHO];
-        for (int j = 0; j < TAMANHO; j++) {
-            linha[j] = sudoku[i][j];
-        }
-        if (!verifica_conjunto(linha)) {
-            return false;
-        }
-    }
-    return true;
-}
+int main(){
+    int entrada;
+    char* resposta;
 
-// Verifica todas as colunas da matriz
-bool verifica_colunas(int sudoku[TAMANHO][TAMANHO]) {
-    for (int j = 0; j < TAMANHO; j++) {
-        int coluna[TAMANHO];
-        for (int i = 0; i < TAMANHO; i++) {
-            coluna[i] = sudoku[i][j];
-        }
-        if (!verifica_conjunto(coluna)) {
-            return false;
-        }
-    }
-    return true;
-}
+    // Entrada controla as instâncias (partidas) que o código vai verificar
+    scanf("%d", &entrada);
 
-// Verifica todas as sub-regiões 3x3 da matriz
-bool verifica_subregioes(int sudoku[TAMANHO][TAMANHO]) {
-    for (int caixa_i = 0; caixa_i < TAMANHO; caixa_i += 3) {
-        for (int caixa_j = 0; caixa_j < TAMANHO; caixa_j += 3) {
-            int subregiao[TAMANHO];
-            int contador = 0;
-            for (int i = 0; i < 3; i++) {
-                for (int j = 0; j < 3; j++) {
-                    subregiao[contador++] = sudoku[caixa_i + i][caixa_j + j];
-                }
-            }
-            if (!verifica_conjunto(subregiao)) {
-                return false;
-            }
-        }
-    }
-    return true;
-}
-
-// Função principal para verificar a matriz Sudoku completa
-bool eh_solucao_sudoku(int sudoku[TAMANHO][TAMANHO]) {
-    return verifica_linhas(sudoku) && verifica_colunas(sudoku) && verifica_subregioes(sudoku);
-}
-
-int main() {
-    int n, k;
-
-    // Leia o número de instâncias
-    scanf("%d", &n);
-
-    for (k = 1; k <= n; k++) {
-        int sudoku[TAMANHO][TAMANHO];
-
-        // Leia a matriz para a instância atual
-        for (int i = 0; i < TAMANHO; i++) {
-            for (int j = 0; j < TAMANHO; j++) {
-                scanf("%d", &sudoku[i][j]);
+    // Preenchendo a tabela do jogo
+    for(int k = 1; k <= entrada; k++){
+        for(int i = 0; i < 9; i++){
+            for(int j = 0; j < 9; j++){
+                scanf("%d", &jogo[i][j]);
             }
         }
 
-        // Imprima o cabeçalho da instância
         printf("Instancia %d\n", k);
 
-        // Verifique se a matriz é uma solução e imprima o resultado
-        if (eh_solucao_sudoku(sudoku)) {
-            printf("SIM\n");
-        } else {
-            printf("NAO\n");
+        // Até que se encontre um erro, o jogo é considerado válido
+        resposta = "SIM";
+
+        // Verificação da validade do jogo
+        for(int i = 0; i < 9; i++){
+            if(!verificaLinha(i) || !verificaColuna(i) || !verificaQuadrado(i)){
+                resposta = "NAO";
+                break;
+            }
         }
 
-        // Imprima uma linha em branco após cada instância
-        printf("\n");
+        printf("%s\n\n", resposta);
     }
 
     return 0;
 }
 
+int verificaLinha(int t){
+    // Vetor para contar os números nos índices correspondentes; se houver repetição, retorna 0
+    int linhas[10] = {0};
+
+    for(int i = 0; i < 9; i++){
+        if(linhas[jogo[t][i]])  // Se o número já apareceu, retorna 0
+            return 0;
+        linhas[jogo[t][i]] += 1;  // Marca o número como visto
+    }
+    return 1;
+}
+
+int verificaColuna(int t){
+    // Vetor para contar os números nos índices correspondentes; se houver repetição, retorna 0
+    int colunas[10] = {0};
+
+    for(int i = 0; i < 9; i++){
+        if(colunas[jogo[i][t]])  // Se o número já apareceu, retorna 0
+            return 0;
+        colunas[jogo[i][t]] += 1;  // Marca o número como visto
+    }
+    return 1;
+}
+
+int verificaQuadrado(int t){
+    // Vetor para contar os números nos índices correspondentes no bloco 3x3; se houver repetição, retorna 0
+    int quadrado[10] = {0};
+    int linha = 3 * (t / 3), coluna = 3 * (t % 3);
+
+    for(int i = 0; i < 3; i++){
+        for(int j = 0; j < 3; j++){
+            if(quadrado[jogo[linha + i][coluna + j]])  // Se o número já apareceu, retorna 0
+                return 0;
+            quadrado[jogo[linha + i][coluna + j]] += 1;  // Marca o número como visto
+        }
+    }
+
+    return 1;
+}
