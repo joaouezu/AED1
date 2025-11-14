@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <stdlib.h> // Para malloc e free
+#include <stdlib.h>
 #include <stdbool.h>
 
 #define TAMANHO 9
