@@ -4,7 +4,6 @@
 #define TAMANHO 9
 
 // Função para verificar se os números de 1 a 9 estão presentes em um conjunto de 9 elementos.
-// Usa um array booleano para rastrear a presença de cada número.
 bool verifica_conjunto(int *conjunto) {
     bool visto[TAMANHO + 1] = {false};
     for (int i = 0; i < TAMANHO; i++) {
@@ -101,3 +100,4 @@ int main() {
 
     return 0;
 }
+
