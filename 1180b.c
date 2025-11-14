@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <stdlib.h> // Para malloc e free
+#include <stdlib.h> 
 
 int main() {
     int N, i;
@@ -30,7 +30,7 @@ int main() {
             }
         }
     }
-
+    // Printando valores
     printf("Menor valor: %d\n", menor);
     printf("Posicao: %d\n", menor_pos);
 
@@ -38,4 +38,5 @@ int main() {
     free(X);
 
     return 0;
+
 }
