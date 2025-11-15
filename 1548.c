@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+
+// Usei a funcao qsort do C, que ordena um vetor conforme uma funcao dada de comparacao
 int comparaDecrescente (const void* a, const void* b) {
     int val_a = *(const int*)a;
     int val_b = *(const int*)b;
