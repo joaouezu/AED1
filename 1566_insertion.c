@@ -3,7 +3,7 @@
 /*Como funciona insertionSort explicado em inhas palavras: basicamente teremos o vetor principal dividido
 em dois, o da esquerda com apenas o primeiro indice do vetor original e o da direita com o restante, a cada
 iteração, os valores da direita sao comparados com os da esquerda, movendo cada valor a saus respectivos espacos*/
-
+/*Esse algoritmo funciona com a repartição recursiva do vetor em vetores menores, reordenando esses vetores e recompondo-os*/
 insertionSort (int arr[], int N) {
     int i, key, j;
     for (i = 1; i < N; i++) { //loop externo passando pelo array a partir do 2o campo, o 1o campo ja esta ordenado
