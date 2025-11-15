@@ -10,11 +10,13 @@ int main(void){
         for(j = 0; j < strlen(expressao); j++){
             if(expressao[j] == '(')
                 verificador++;
+                // Se vetor tem um '(' contamos como um push e incrementamos o verificador
             else{
                 if(expressao[j] == ')'){
                     verificador--;
                     if(verificador < 0)
                         break;
+                    // Se vetor contem '(' e ')' fazemos um pop e decrescemos o verificador
                 }
             }
         }
@@ -23,6 +25,7 @@ int main(void){
         else
             printf("incorrect\n");
         expressao[0] = '\0';
+        // Se verificador esta zerado quer dizer que todos os parenteses estao com seus pares corretos
     }   
 
     return 0;
